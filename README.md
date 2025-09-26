@@ -1,98 +1,252 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Customer Orders API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+¡Bienvenido! Este proyecto es una API para la gestión de clientes, direcciones y órdenes, desarrollada como prueba técnica. Permite registrar clientes, gestionar direcciones, crear órdenes y consultar información relevante.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tecnologías
 
-## Description
+- **Node.js** `v22.16.0`
+- **NestJS** (estructura modular)
+- **TypeORM** (ORM para base de datos relacional)
+- **MySql**
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Instalación
 
-## Project setup
+1. Instala las dependencias:
+   ```bash
+   npm install
+   ```
+
+2. Crea un archivo `.env` en la raíz del proyecto. Puedes guiarte por el archivo `.env.example`.  
+   **Importante:** Usa los valores de tu base de datos para la conexión.
+
+## Ejecución en local
 
 ```bash
-$ npm install
+npm run start:dev
 ```
 
-## Compile and run the project
+## Estructura del Proyecto
 
-```bash
-# development
-$ npm run start
+- **src/features/customers/**: Gestión de clientes
+- **src/features/addresses/**: Gestión de direcciones
+- **src/features/orders/**: Gestión de órdenes
 
-# watch mode
-$ npm run start:dev
+## Endpoints Principales
 
-# production mode
-$ npm run start:prod
+### Clientes
+
+- **Crear cliente**
+  - `POST /clientes`
+  - **Body:**
+    ```json
+    {
+      "nombre": "Juan",
+      "apellido": "Pérez",
+      "edad": 30,
+      "email": "juan@example.com"
+    }
+    ```
+  - **Response:** Cliente creado
+
+- **Obtener todos los clientes**
+  - `GET /clientes`
+  - **Response:**  
+    ```json
+    [
+      {
+        "id": 1,
+        "nombre": "Juan",
+        "apellido": "Pérez",
+        "edad": 30,
+        "email": "juan@example.com",
+        "fecha_registro": "2024-01-01T06:00:00.000Z"
+      },
+      {
+        "id": 2,
+        "nombre": "María",
+        "apellido": "Gómez",
+        "edad": 25,
+        "email": "maria@example.com",
+        "fecha_registro": "2024-01-02T06:00:00.000Z"
+      }
+    ]
+    ```
+
+- **Obtener cliente por ID**
+  - `GET /clientes/1`
+  - **Response:**  
+    ```json
+      {
+        "id": 1,
+        "nombre": "Juan",
+        "apellido": "Pérez",
+        "edad": 30,
+        "email": "juan@example.com",
+        "fecha_registro": "2024-01-01T06:00:00.000Z",
+        "cliente_id": 1,
+        "calle": "Calle Principal 12345",
+        "ciudad": "campeche",
+        "codigo_postal": "97203"
+      }
+    ```
+
+### Direcciones
+
+- **Actualizar dirección**
+  - `POST /direcciones?id=3`
+  - Al consumir este endpoint, se actualizará la dirección pasando el id por Query param y la información por body.
+  - **Body:**
+    ```json
+      {
+          "calle": "francisco de montejo",
+          "ciudad": "yucatan",
+          "codigo_postal": "97203"
+      }
+    ```
+  - **Response:** 
+   ```json
+      {
+        "message": "Dirección actualizada correctamente",
+        "data": {
+          "id": 1,
+          "cliente_id": 1,
+          "calle": "ejemplo",
+          "ciudad": "merida",
+          "codigo_postal": "97203"
+        }
+      }
+    ```
+
+- **Obtener todas las direcciones**
+  - `GET /direcciones`
+  - **Response:**  
+    ```json
+    [
+      {
+        "id": 1,
+        "cliente_id": 1,
+        "calle": "Calle Principal 12345",
+        "ciudad": "campeche",
+        "codigo_postal": "97203"
+      },
+      {
+        "id": 2,
+        "cliente_id": 2,
+        "calle": "Avenida Central 456",
+        "ciudad": "Ciudad B",
+        "codigo_postal": "23456"
+      }
+    ]
+    ```
+
+### Órdenes
+
+- **Crear orden**
+  - `POST /ordenes`
+  - **Body:**
+    ```json
+      {
+          "cliente_id": 1,
+          "items" : [
+              {
+                  "producto": "Producto Laptop",
+                  "cantidad": 2
+              },
+              {
+                  "producto": "Producto Notebook",
+                  "cantidad": 2
+              },
+              {
+                  "producto": "Producto Xbox",
+                  "cantidad": 2
+              }
+          ]
+      }
+    ```
+  - **Response:**  
+  - El requerimiento indica que el folio deberá tener el prefigo TEST seguido de 6 alfanumericos (es decir, letras o números)
+    ```json
+    {
+      "folio": "TESTABC123"
+    }
+    ```
+
+- **Obtener órdenes por cliente**
+  - `GET /ordenes/3`
+  - **Response:**  
+    ```json
+      [
+        {
+          "id": 4,
+          "cliente_id": 4,
+          "producto": "Producto D",
+          "cantidad": 4,
+          "fecha_pedido": "2024-01-04T06:00:00.000Z",
+          "folio": "JKL012"
+        }
+      ]
+    ```
+- **Obtener órdenes por folio**
+  - `GET /ordenes/folio/TEST298325`
+  - **Response:**  
+    ```json
+    [
+      {
+        "id": 15,
+        "cliente_id": 1,
+        "producto": "Producto Laptop",
+        "cantidad": 2,
+        "fecha_pedido": null,
+        "folio": "TEST298325"
+      },
+      {
+        "id": 16,
+        "cliente_id": 1,
+        "producto": "Producto Notebook",
+        "cantidad": 2,
+        "fecha_pedido": null,
+        "folio": "TEST298325"
+      }
+    ]
+    ```
+
+  - **Obtener todas las órdenes**
+  - `GET /ordenes`
+  - **Response:**  
+    ```json
+      [
+        {
+          "id": 1,
+          "cliente_id": 1,
+          "producto": "Producto A",
+          "cantidad": 2,
+          "fecha_pedido": "2024-01-01T06:00:00.000Z",
+          "folio": "ABC123"
+        },
+        {
+          "id": 2,
+          "cliente_id": 2,
+          "producto": "Producto B",
+          "cantidad": 3,
+          "fecha_pedido": "2024-01-02T06:00:00.000Z",
+          "folio": "DEF456"
+        },
+      ]
+    ```
+
+## Variables de entorno
+
+Configura tu archivo `.env` con los siguientes valores:
+
+```
+PORT=puerto_a_exponer(default: 3000)
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=usuario
+DB_PASSWORD=contraseña
+DB_NAME=nombre_db
 ```
 
-## Run tests
+---
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+**¡Gracias por revisar este proyecto!**
